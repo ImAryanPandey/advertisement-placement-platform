@@ -1,0 +1,87 @@
+/* src/styles/global.css */
+@import './variables.css';
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  width: 90%;
+  background-color: var(--color-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  margin: 20px;
+}
+
+.card {
+  background-color: var(--color-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h1, h2, h3 {
+  color: var(--color-heading);
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: var(--color-accent);
+  color: var(--color-text);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: var(--color-accent-hover);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+input[type="file"] {
+  padding: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  input, textarea {
+    font-size: 14px;
+  }
+}

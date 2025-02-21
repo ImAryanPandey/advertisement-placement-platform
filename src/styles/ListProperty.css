@@ -1,0 +1,16 @@
+/* src/components/ListProperty.css */
+.list-property-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .card {
+    flex: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .list-property-container {
+      flex-direction: column;
+    }
+  }

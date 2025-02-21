@@ -1,0 +1,16 @@
+/* src/components/Register.css */
+.register-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .card {
+    flex: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .register-container {
+      flex-direction: column;
+    }
+  }

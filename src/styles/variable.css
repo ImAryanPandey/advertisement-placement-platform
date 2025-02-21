@@ -1,0 +1,11 @@
+/* src/styles/variables.css */
+:root {
+    --font-primary: 'Open Sans', sans-serif;
+    --color-bg: #f0f0f0;
+    --color-text: #333;
+    --color-heading: #222;
+    --color-card-bg: #fff;
+    --color-accent: #ff6b6b;
+    --color-accent-hover: #ff4747;
+    --color-border: #ddd;
+  }
