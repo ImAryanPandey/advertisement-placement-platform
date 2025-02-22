@@ -9,6 +9,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('navigate token one');
     const token = localStorage.getItem('token');
     if (token) {
       const verifyToken = async () => {
@@ -20,8 +21,8 @@ const Dashboard = () => {
             },
           });
           const data = await response.json();
-          if (data.user) {
-            setRole(data.user.role);
+          if (data) {
+            setRole(data.role);
           }
         } catch (error) {
           console.error('Error verifying token:', error);
@@ -34,6 +35,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   useEffect(() => {
+    console.log('Verifying properties');
     const fetchProperties = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/properties');

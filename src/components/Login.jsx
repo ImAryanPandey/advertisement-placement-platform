@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Button, TextField, Typography, Container, Paper, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,6 +29,7 @@ const Login = ({ onLoginSuccess }) => {
         localStorage.setItem('token', data.token);
         if (onLoginSuccess) {
           onLoginSuccess();
+          navigate('/dashboard')
         }
       } else {
         setError(data.msg || 'An error occurred. Please try again.');
