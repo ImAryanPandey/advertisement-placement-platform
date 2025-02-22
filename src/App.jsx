@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { CssBaseline, AppBar, Toolbar, Typography, Container, Box, Grid, Button, Link } from '@mui/material';
+import { CssBaseline, AppBar, Toolbar, Typography, Container, Box, Button, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Register from './components/Register';
-import Login from './components/Login';
 import Profile from './components/Profile';
 
 function App() {

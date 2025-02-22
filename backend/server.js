@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const connectDB = require('./db');
+const connectToMongo = require('./db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./models/User');
+const Property = require('./models/Property');
+const Request = require('./models/Request');
 const propertyRoutes = require('./routes/properties');
 const requestRoutes = require('./routes/requests');
 
@@ -15,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-connectDB();
+connectToMongo();
 
 // Middleware to extract user from token
 const auth = require('./middleware/auth');

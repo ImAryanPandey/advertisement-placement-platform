@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Container, Box, Button, Card, CardMedia, CardContent, CardActions } from '@mui/material';
+import { Typography, Container, Box, Button, Card, CardMedia, CardContent, CardActions, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SendRequest from './SendRequest';
 
@@ -43,7 +43,6 @@ const Dashboard = () => {
         console.error('Error fetching properties:', error);
       }
     };
-
     fetchProperties();
   }, []);
 
@@ -59,7 +58,9 @@ const Dashboard = () => {
           </Button>
         </Box>
       ) : null}
-      <Box sx={{ mt: 4 }}>
+      {properties.length === 0 ? (
+        <Typography variant="body1">No properties listed.</Typography>
+      ) : (
         <Grid container spacing={3}>
           {properties.map((property) => (
             <Grid item xs={12} sm={6} md={4} key={property._id}>
@@ -88,7 +89,7 @@ const Dashboard = () => {
             </Grid>
           ))}
         </Grid>
-      </Box>
+      )}
     </Container>
   );
 };

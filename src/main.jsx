@@ -15,7 +15,7 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/login" element={<Login setRole={(role) => setRole(role)} onLoginSuccess={() => navigate('/dashboard')} />} />
+        <Route path="/login" element={<Login onLoginSuccess={() => console.log('Login Success')} />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add-property" element={<AddProperty />} />
       </Routes>

@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { Button, TextField, Typography, Container, Paper, Alert } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-const Login = ({ setRole, onLoginSuccess }) => {
+const Login = ({ onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,14 +25,15 @@ const Login = ({ setRole, onLoginSuccess }) => {
       const data = await response.json();
       if (data.token) {
         localStorage.setItem('token', data.token);
-        setRole(data.user.role);
-        onLoginSuccess();
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
       } else {
-        setError(data.msg);
+        setError(data.msg || 'An error occurred. Please try again.');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      setError('An error occurred. Please try again.');
+      setError(error.message || 'An error occurred. Please try again.');
     }
   };
 
