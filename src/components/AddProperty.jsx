@@ -28,10 +28,32 @@ const AddProperty = () => {
     setFormData((prev) => ({ ...prev, images: [...prev.images, ...acceptedFiles] }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting:', formData);
-    navigate('/dashboard');
+    const formDataToSend = new FormData();
+    formDataToSend.append('title', formData.title);
+    formDataToSend.append('description', formData.description);
+    formDataToSend.append('dimensions', formData.dimensions);
+    formDataToSend.append('address', formData.address);
+    formDataToSend.append('landmarks', formData.landmarks);
+    formDataToSend.append('expectedTraffic', formData.expectedTraffic);
+    for (let i = 0; i < formData.images.length; i++) {
+      formDataToSend.append('images', formData.images[i]);
+    }
+    try {
+      const response = await fetch('http://localhost:5000/api/properties', {
+        method: 'POST',
+        headers: {
+          'x-auth-token': localStorage.getItem('token'),
+        },
+        body: formDataToSend,
+      });
+      const data = await response.json();
+      console.log(data);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error listing property:', error);
+    }
   };
 
   return (

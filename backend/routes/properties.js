@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const Property = require('../models/Property');
+const { upload } = require('../utils/fileUpload');
 
 // Add a Property
-router.post('/', auth, async (req, res) => {
+router.post('/', auth,  upload.array('images', 5), async (req, res) => {
   const { title, description, images, dimensions, address, landmarks, expectedTraffic } = req.body;
 
   try {
