@@ -8,6 +8,7 @@ const Register = ({ setRole, onRegisterSuccess }) => {
     password: '',
     role: 'owner',
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,11 +30,11 @@ const Register = ({ setRole, onRegisterSuccess }) => {
         setRole(formData.role);
         onRegisterSuccess();
       } else {
-        alert('Registration failed. Please try again.');
+        setError(data.msg || 'Registration failed. Please try again.');
       }
     } catch (error) {
       console.error('Error registering:', error);
-      alert('An error occurred. Please try again.');
+      setError('An error occurred. Please try again.');
     }
   };
 
@@ -43,6 +44,7 @@ const Register = ({ setRole, onRegisterSuccess }) => {
         <Typography variant="h4" gutterBottom>
           Register
         </Typography>
+        {error && <Alert severity="error">{error}</Alert>}
         <form onSubmit={handleSubmit}>
           <FormLabel id="demo-radio-buttons-group-label">Choose Your Role</FormLabel>
           <RadioGroup

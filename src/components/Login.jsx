@@ -3,12 +3,12 @@ import { Button, TextField, Typography, Container, Paper, Alert } from '@mui/mat
 import { useNavigate } from 'react-router-dom';
 
 const Login = ({ onLoginSuccess }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,14 +29,14 @@ const Login = ({ onLoginSuccess }) => {
         localStorage.setItem('token', data.token);
         if (onLoginSuccess) {
           onLoginSuccess();
-          navigate('/dashboard')
         }
+        navigate('/dashboard');
       } else {
         setError(data.msg || 'An error occurred. Please try again.');
       }
     } catch (error) {
       console.error('Error logging in:', error);
-      setError(error.message || 'An error occurred. Please try again.');
+      setError('An error occurred. Please try again.');
     }
   };
 

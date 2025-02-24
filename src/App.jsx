@@ -85,11 +85,23 @@ function App() {
                   Add Property
                 </Button>
               ) : null}
+              {role === 'business' ? (
+                <Button variant="contained" color="secondary" href="/browse-properties" sx={{ mb: 2 }}>
+                  Browse Properties
+                </Button>
+              ) : null}
               <Link href="/dashboard" underline="none">
                 <Button variant="outlined" color="primary">
                   Go to Dashboard
                 </Button>
               </Link>
+            </Box>
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="h5" gutterBottom>
+                Recent Activity
+              </Typography>
+              {/* Placeholder for recent activity */}
+              <Typography variant="body1">No recent activity.</Typography>
             </Box>
           </>
         )}

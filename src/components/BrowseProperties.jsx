@@ -1,44 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Container, Box, Button, Card, CardMedia, CardContent, CardActions, Grid, CircularProgress, Alert } from '@mui/material';
+import { Typography, Container, Box, Card, CardMedia, CardContent, CardActions, Grid, CircularProgress, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SendRequest from './SendRequest';
 
-const Dashboard = () => {
-  const [role, setRole] = useState(null);
+const BrowseProperties = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log('Verifying token');
-    const token = localStorage.getItem('token');
-    if (token) {
-      const verifyToken = async () => {
-        try {
-          const response = await fetch('http://localhost:5000/api/auth', {
-            method: 'GET',
-            headers: {
-              'x-auth-token': token,
-            },
-          });
-          const data = await response.json();
-          if (data) {
-            setRole(data.role);
-          }
-        } catch (error) {
-          console.error('Error verifying token:', error);
-          localStorage.removeItem('token');
-          navigate('/');
-          setError('Failed to verify token. Please log in again.');
-        }
-      };
-      verifyToken();
-    } else {
-      navigate('/');
-      setError('No token found. Please log in.');
-    }
-  }, [navigate]);
 
   useEffect(() => {
     console.log('Fetching properties');
@@ -60,7 +29,7 @@ const Dashboard = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Dashboard
+        Browse Properties
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
       {loading ? (
@@ -69,15 +38,8 @@ const Dashboard = () => {
         </Box>
       ) : (
         <>
-          {role === 'owner' ? (
-            <Box sx={{ mt: 4 }}>
-              <Button variant="contained" color="primary" href="/add-property" sx={{ mb: 2 }}>
-                Add Property
-              </Button>
-            </Box>
-          ) : null}
           {properties.length === 0 ? (
-            <Typography variant="body1">No properties listed.</Typography>
+            <Typography variant="body1">No properties available.</Typography>
           ) : (
             <Grid container spacing={3}>
               {properties.map((property) => (
@@ -101,7 +63,7 @@ const Dashboard = () => {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      {role === 'business' ? <SendRequest propertyId={property._id} /> : null}
+                      <SendRequest propertyId={property._id} />
                     </CardActions>
                   </Card>
                 </Grid>
@@ -114,4 +76,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default BrowseProperties;

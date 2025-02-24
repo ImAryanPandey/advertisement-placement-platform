@@ -1,144 +1,83 @@
 import React, { useState } from 'react';
-import { Button, TextField, Typography, Container, Paper, InputLabel, OutlinedInput, InputAdornment, IconButton, FormControl, FormHelperText, Grid } from '@mui/material';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { TextField, Button, Container, Box, Typography, MenuItem, Slider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Dropzone from 'react-dropzone';
 
 const AddProperty = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    images: [],
-    dimensions: '',
     address: '',
     landmarks: '',
-    expectedTraffic: '',
+    dimensions: '',
+    footfall: 500,
+    footfallType: 'Daily',
+    images: []
   });
-  const navigate = useNavigate();
-
+  
   const handleChange = (e) => {
-    if (e.target.name === 'images') {
-      setFormData({ ...formData, [e.target.name]: e.target.files });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formDataToSend = new FormData();
-    formDataToSend.append('title', formData.title);
-    formDataToSend.append('description', formData.description);
-    formDataToSend.append('dimensions', formData.dimensions);
-    formDataToSend.append('address', formData.address);
-    formDataToSend.append('landmarks', formData.landmarks);
-    formDataToSend.append('expectedTraffic', formData.expectedTraffic);
-    for (let i = 0; i < formData.images.length; i++) {
-      formDataToSend.append('images', formData.images[i]);
-    }
+  const handleFootfallChange = (e, value) => {
+    setFormData({ ...formData, footfall: value });
+  };
 
-    try {
-      const response = await fetch('http://localhost:5000/api/properties', {
-        method: 'POST',
-        headers: {
-          'x-auth-token': localStorage.getItem('token'),
-        },
-        body: formDataToSend,
-      });
-      const data = await response.json();
-      console.log(data);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Error listing property:', error);
-    }
+  const handleFileDrop = (acceptedFiles) => {
+    setFormData((prev) => ({ ...prev, images: [...prev.images, ...acceptedFiles] }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Submitting:', formData);
+    navigate('/dashboard');
   };
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: '2rem' }}>
-      <Paper elevation={3} style={{ padding: '2rem', textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
-          Add Your Property
-        </Typography>
-        <form onSubmit={handleSubmit}>
+    <Container maxWidth="md">
+      <Typography variant="h4" gutterBottom>
+        Add Property
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        {['title', 'description', 'address', 'landmarks', 'dimensions'].map((field) => (
           <TextField
-            label="Title"
-            variant="outlined"
+            key={field}
             fullWidth
-            margin="normal"
-            name="title"
-            value={formData.title}
+            label={field.charAt(0).toUpperCase() + field.slice(1)}
+            name={field}
+            value={formData[field]}
             onChange={handleChange}
+            margin="normal"
             required
+            multiline={field === 'description'}
+            rows={field === 'description' ? 3 : 1}
           />
-          <TextField
-            label="Description"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            multiline
-            rows={4}
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel htmlFor="images">Images</InputLabel>
-            <OutlinedInput
-              inputProps={{
-                accept: 'image/*',
-              }}
-              input={<input id="images" type="file" multiple />}
-              onChange={handleChange}
-              name="images"
-              required
-            />
-            <FormHelperText>
-              Upload images of your property
-            </FormHelperText>
-          </FormControl>
-          <TextField
-            label="Dimensions"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="dimensions"
-            value={formData.dimensions}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            label="Address"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            label="Landmarks"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="landmarks"
-            value={formData.landmarks}
-            onChange={handleChange}
-          />
-          <TextField
-            label="Expected Traffic"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            name="expectedTraffic"
-            value={formData.expectedTraffic}
-            onChange={handleChange}
-          />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Add Property
-          </Button>
-        </form>
-      </Paper>
+        ))}
+        
+        <Typography gutterBottom>Estimated Footfall</Typography>
+        <Slider value={formData.footfall} onChange={handleFootfallChange} min={100} max={10000} step={100} valueLabelDisplay="auto" />
+        
+        <TextField select fullWidth label="Footfall Type" name="footfallType" value={formData.footfallType} onChange={handleChange} margin="normal">
+          {['Daily', 'Weekly', 'Monthly'].map((type) => (
+            <MenuItem key={type} value={type}>{type}</MenuItem>
+          ))}
+        </TextField>
+        
+        <Dropzone onDrop={handleFileDrop} accept="image/*">
+          {({ getRootProps, getInputProps }) => (
+            <Box {...getRootProps()} sx={{ border: '2px dashed gray', padding: 3, textAlign: 'center', cursor: 'pointer', mt: 2 }}>
+              <input {...getInputProps()} />
+              <Typography>Drag & Drop images here, or click to select files</Typography>
+            </Box>
+          )}
+        </Dropzone>
+        <Box mt={2}>{formData.images.map((file, index) => <Typography key={index}>{file.name}</Typography>)}</Box>
+        
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
+          Submit Property
+        </Button>
+      </form>
     </Container>
   );
 };
