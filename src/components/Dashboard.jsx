@@ -74,43 +74,51 @@ const Dashboard = () => {
               <Button variant="contained" color="primary" href="/add-property" sx={{ mb: 2 }}>
                 Add Property
               </Button>
+              <Button variant="contained" color="inherit" href="/requests" sx={{ mb: 2, mx: 2 }}>
+                Requests
+              </Button>
             </Box>
-          ) : null}
-          {properties.length === 0 ? (
-            <Typography variant="body1">No properties listed.</Typography>
-          ) : (
-            <Grid container spacing={3}>
-              {properties.map((property) => (
-                <Grid item xs={12} sm={6} md={4} key={property._id}>
-                  <Card>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={property.images[0] || 'https://via.placeholder.com/300'}
-                      alt={property.title}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {property.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {property.description}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Address: {property.address}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      {role === 'business' ? <SendRequest propertyId={property._id} /> : null}
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+          ) : <Box sx={{ mt: 4 }}>
+          <Button variant="contained" color="primary" href="/request-status" sx={{ mb: 2 }}>
+            Request Status
+          </Button>
+        </Box> }
+      {properties.length === 0 ? (
+        <Typography variant="body1">No properties listed.</Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {properties.map((property) => (
+            <Grid item xs={12} sm={6} md={4} key={property._id}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={property.images[0] || 'https://via.placeholder.com/300'}
+                  alt={property.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {property.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {property.description}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Address: {property.address}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  {role === 'business' ? <SendRequest propertyId={property._id} /> : null}
+                </CardActions>
+              </Card>
             </Grid>
-          )}
-        </>
+          ))}
+        </Grid>
       )}
-    </Container>
+    </>
+  )
+}
+    </Container >
   );
 };
 

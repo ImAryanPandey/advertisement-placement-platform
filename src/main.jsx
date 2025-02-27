@@ -9,6 +9,8 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import AddProperty from './components/AddProperty';
 import BrowseProperties from './components/BrowseProperties';
+import Requests from './components/Requests';
+import RequestStatus from './components/RequestStatus';
 
 // Wrapper to handle navigation inside Login
 function LoginWithNavigate() {
@@ -26,6 +28,8 @@ root.render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add-property" element={<AddProperty />} />
         <Route path="/browse-properties" element={<BrowseProperties />} />
+        <Route path="/requests" element={<Requests />} />
+        <Route path="/request-status" element={<RequestStatus />} />
       </Routes>
     </Router>
   </ThemeProvider>
