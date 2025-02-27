@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Typography, MenuItem, Slider } from '@mui/material';
+import { TextField, Button, Container, Box, Typography, MenuItem, Slider, Alert, Grid, Card, CardMedia } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 
@@ -15,7 +15,9 @@ const AddProperty = () => {
     footfallType: 'Daily',
     images: []
   });
-  
+  const [fileNames, setFileNames] = useState([]);
+  const [error, setError] = useState('');
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,6 +28,7 @@ const AddProperty = () => {
 
   const handleFileDrop = (acceptedFiles) => {
     setFormData((prev) => ({ ...prev, images: [...prev.images, ...acceptedFiles] }));
+    setFileNames(acceptedFiles.map(file => file.name));
   };
 
   const handleSubmit = async (e) => {
@@ -40,6 +43,7 @@ const AddProperty = () => {
     for (let i = 0; i < formData.images.length; i++) {
       formDataToSend.append('images', formData.images[i]);
     }
+
     try {
       const response = await fetch('http://localhost:5000/api/properties', {
         method: 'POST',
@@ -49,10 +53,15 @@ const AddProperty = () => {
         body: formDataToSend,
       });
       const data = await response.json();
-      console.log(data);
-      navigate('/dashboard');
+      if (response.ok) {
+        console.log(data);
+        navigate('/dashboard');
+      } else {
+        setError(data.errors ? data.errors.map(err => err.msg).join('\n') : data.msg || 'An error occurred. Please try again.');
+      }
     } catch (error) {
       console.error('Error listing property:', error);
+      setError('An error occurred. Please try again.');
     }
   };
 
@@ -61,6 +70,7 @@ const AddProperty = () => {
       <Typography variant="h4" gutterBottom>
         Add Property
       </Typography>
+      {error && <Alert severity="error">{error}</Alert>}
       <form onSubmit={handleSubmit}>
         {['title', 'description', 'address', 'landmarks', 'dimensions'].map((field) => (
           <TextField
@@ -94,7 +104,31 @@ const AddProperty = () => {
             </Box>
           )}
         </Dropzone>
-        <Box mt={2}>{formData.images.map((file, index) => <Typography key={index}>{file.name}</Typography>)}</Box>
+        <Box mt={2}>
+          {formData.images.length > 0 ? (
+            <Grid container spacing={1}>
+              {formData.images.map((file, index) => (
+                <Grid item key={index}>
+                  <Card sx={{ maxWidth: 150 }}>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={URL.createObjectURL(file)}
+                      alt={file.name}
+                    />
+                    <CardContent>
+                      <Typography variant="body2" color="text.secondary">
+                        {file.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography>No images selected</Typography>
+          )}
+        </Box>
         
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
           Submit Property
