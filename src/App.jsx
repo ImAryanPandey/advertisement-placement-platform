@@ -29,9 +29,13 @@ function App() {
           console.error('Error verifying token:', error);
           localStorage.removeItem('token');
           navigate('/');
+          setError('Failed to verify token. Please log in again.');
         }
       };
       verifyToken();
+    } else {
+      navigate('/');
+      setError('No token found. Please log in.');
     }
   }, [navigate]);
 

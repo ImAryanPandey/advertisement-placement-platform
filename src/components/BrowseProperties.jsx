@@ -26,6 +26,10 @@ const BrowseProperties = () => {
     fetchProperties();
   }, []);
 
+  const handleViewDetails = (id) => {
+    navigate(`/property/${id}`);
+  };
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom>
@@ -63,7 +67,10 @@ const BrowseProperties = () => {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <SendRequest propertyId={property._id} />
+                      {role === 'business' ? <SendRequest propertyId={property._id} /> : null}
+                      <Button size="small" color="primary" onClick={() => handleViewDetails(property._id)}>
+                        View Details
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>

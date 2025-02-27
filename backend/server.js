@@ -9,7 +9,8 @@ const Property = require('./models/Property');
 const Request = require('./models/Request');
 const propertyRoutes = require('./routes/properties');
 const requestRoutes = require('./routes/requests');
-const userRoutes = require('./routes/users'); // Add this line
+const userRoutes = require('./routes/users');
+const { upload } = require('./utils/fileUpload');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -119,7 +120,10 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/requests', requestRoutes);
 
 // User Routes
-app.use('/api/users', userRoutes); // Add this line
+app.use('/api/users', userRoutes);
+
+// Serve uploaded images
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Advertisement Placement Platform Backend');
