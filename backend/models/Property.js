@@ -32,6 +32,38 @@ const PropertySchema = new mongoose.Schema({
   expectedTraffic: {
     type: String,
   },
+  footfall: {
+    type: Number,
+    required: true,
+  },
+  footfallType: {
+    type: String,
+    enum: ['Daily', 'Weekly', 'Monthly'],
+    required: true,
+  },
+  pricing: {
+    monthly: {
+      type: Number,
+      required: true,
+    },
+    weekly: {
+      type: Number,
+      default: null,
+    },
+  },
+  availability: {
+    startDate: {
+      type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
+  },
+  status: {
+    type: String,
+    enum: ['Available', 'Requested', 'Approved', 'Rejected'],
+    default: 'Available',
+  },
 });
 
 module.exports = mongoose.model('Property', PropertySchema);

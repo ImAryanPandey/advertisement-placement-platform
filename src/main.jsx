@@ -9,11 +9,21 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import AddProperty from './components/AddProperty';
 import BrowseProperties from './components/BrowseProperties';
+import PropertyDetails from './components/PropertyDetails';
 
 // Wrapper to handle navigation inside Login
-function LoginWithNavigate() {
+function LoginWithNavigate({ onLoginSuccess }) {
   const navigate = useNavigate();
-  return <Login onLoginSuccess={() => navigate('/dashboard')} />;
+  return <Login onLoginSuccess={() => onLoginSuccess()} />;
+}
+
+// Wrapper to pass role to Dashboard and BrowseProperties
+function DashboardWithRole({ role }) {
+  return <Dashboard role={role} />;
+}
+
+function BrowsePropertiesWithRole({ role }) {
+  return <BrowseProperties role={role} />;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,10 +32,11 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/login" element={<LoginWithNavigate />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/login" element={<LoginWithNavigate onLoginSuccess={() => navigate('/dashboard')} />} />
+        <Route path="/dashboard" element={<DashboardWithRole role={localStorage.getItem('role')} />} />
         <Route path="/add-property" element={<AddProperty />} />
-        <Route path="/browse-properties" element={<BrowseProperties />} />
+        <Route path="/browse-properties" element={<BrowsePropertiesWithRole role={localStorage.getItem('role')} />} />
+        <Route path="/property/:id" element={<PropertyDetails role={localStorage.getItem('role')} />} />
       </Routes>
     </Router>
   </ThemeProvider>

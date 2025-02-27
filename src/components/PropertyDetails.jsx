@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Container, Box, Button, Card, CardMedia, CardContent, Grid, CircularProgress, Alert } from '@mui/material';
+import { Typography, Container, Box, Button, Card, CardMedia, CardContent, Grid, CircularProgress, Alert, CardActions } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const PropertyDetails = ({ role }) => { // Add role as a prop
+const PropertyDetails = ({ role }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
@@ -31,7 +31,7 @@ const PropertyDetails = ({ role }) => { // Add role as a prop
   }, [id]);
 
   const handleBackToDashboard = () => {
-    navigate(-1); // Navigate back to the previous page
+    navigate(-1);
   };
 
   return (
@@ -76,6 +76,14 @@ const PropertyDetails = ({ role }) => { // Add role as a prop
               <Typography variant="body2" color="text.secondary">
                 Expected Traffic: {property.expectedTraffic}
               </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Monthly Pricing: ${property.pricing.monthly}
+              </Typography>
+              {property.pricing.weekly && (
+                <Typography variant="body2" color="text.secondary">
+                  Weekly Pricing: ${property.pricing.weekly}
+                </Typography>
+              )}
             </CardContent>
             <CardActions>
               <Button size="small" color="primary" onClick={handleBackToDashboard}>
@@ -99,7 +107,7 @@ const PropertyDetails = ({ role }) => { // Add role as a prop
                     <CardMedia
                       component="img"
                       height="140"
-                      image={`http://localhost:5000/${imagePath}`} // Ensure absolute URL
+                      image={`http://localhost:5000/${imagePath}`}
                       alt={`Image ${index + 1}`}
                     />
                     <CardContent>

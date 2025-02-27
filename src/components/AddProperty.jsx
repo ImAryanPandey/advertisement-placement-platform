@@ -13,13 +13,34 @@ const AddProperty = () => {
     dimensions: '',
     footfall: 500,
     footfallType: 'Daily',
-    images: []
+    pricing: {
+      monthly: '',
+      weekly: '',
+    },
+    availability: {
+      startDate: '',
+      endDate: '',
+    },
+    images: [],
   });
   const [fileNames, setFileNames] = useState([]);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name.includes('.')) {
+      // Handle nested fields like pricing.monthly
+      const [parent, child] = name.split('.');
+      setFormData((prev) => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value,
+        },
+      }));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleFootfallChange = (e, value) => {
@@ -40,6 +61,12 @@ const AddProperty = () => {
     formDataToSend.append('address', formData.address);
     formDataToSend.append('landmarks', formData.landmarks);
     formDataToSend.append('expectedTraffic', formData.expectedTraffic);
+    formDataToSend.append('footfall', formData.footfall);
+    formDataToSend.append('footfallType', formData.footfallType);
+    formDataToSend.append('pricing.monthly', formData.pricing.monthly);
+    formDataToSend.append('pricing.weekly', formData.pricing.weekly);
+    formDataToSend.append('availability.startDate', formData.availability.startDate);
+    formDataToSend.append('availability.endDate', formData.availability.endDate);
     for (let i = 0; i < formData.images.length; i++) {
       formDataToSend.append('images', formData.images[i]);
     }
@@ -86,16 +113,72 @@ const AddProperty = () => {
             rows={field === 'description' ? 3 : 1}
           />
         ))}
-        
+
         <Typography gutterBottom>Estimated Footfall</Typography>
-        <Slider value={formData.footfall} onChange={handleFootfallChange} min={100} max={10000} step={100} valueLabelDisplay="auto" />
-        
-        <TextField select fullWidth label="Footfall Type" name="footfallType" value={formData.footfallType} onChange={handleChange} margin="normal">
+        <Slider
+          value={formData.footfall}
+          onChange={handleFootfallChange}
+          min={100}
+          max={10000}
+          step={100}
+          valueLabelDisplay="auto"
+        />
+
+        <TextField
+          select
+          fullWidth
+          label="Footfall Type"
+          name="footfallType"
+          value={formData.footfallType}
+          onChange={handleChange}
+          margin="normal"
+        >
           {['Daily', 'Weekly', 'Monthly'].map((type) => (
             <MenuItem key={type} value={type}>{type}</MenuItem>
           ))}
         </TextField>
-        
+
+        <TextField
+          type="number"
+          fullWidth
+          label="Monthly Pricing"
+          name="pricing.monthly"
+          value={formData.pricing.monthly}
+          onChange={handleChange}
+          margin="normal"
+          required
+        />
+
+        <TextField
+          type="number"
+          fullWidth
+          label="Weekly Pricing (Optional)"
+          name="pricing.weekly"
+          value={formData.pricing.weekly}
+          onChange={handleChange}
+          margin="normal"
+        />
+
+        <TextField
+          type="date"
+          fullWidth
+          label="Availability Start Date (Optional)"
+          name="availability.startDate"
+          value={formData.availability.startDate}
+          onChange={handleChange}
+          margin="normal"
+        />
+
+        <TextField
+          type="date"
+          fullWidth
+          label="Availability End Date (Optional)"
+          name="availability.endDate"
+          value={formData.availability.endDate}
+          onChange={handleChange}
+          margin="normal"
+        />
+
         <Dropzone onDrop={handleFileDrop} accept="image/*">
           {({ getRootProps, getInputProps }) => (
             <Box {...getRootProps()} sx={{ border: '2px dashed gray', padding: 3, textAlign: 'center', cursor: 'pointer', mt: 2 }}>
@@ -104,6 +187,7 @@ const AddProperty = () => {
             </Box>
           )}
         </Dropzone>
+
         <Box mt={2}>
           {formData.images.length > 0 ? (
             <Grid container spacing={1}>
@@ -129,7 +213,7 @@ const AddProperty = () => {
             <Typography>No images selected</Typography>
           )}
         </Box>
-        
+
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
           Submit Property
         </Button>

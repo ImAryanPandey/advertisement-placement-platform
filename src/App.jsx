@@ -3,6 +3,8 @@ import { CssBaseline, AppBar, Toolbar, Typography, Container, Box, Button, Link 
 import { useNavigate } from 'react-router-dom';
 import Register from './components/Register';
 import Profile from './components/Profile';
+import Dashboard from './components/Dashboard';
+import BrowseProperties from './components/BrowseProperties';
 
 function App() {
   const [role, setRole] = useState(null);
@@ -89,11 +91,9 @@ function App() {
                   Add Property
                 </Button>
               ) : null}
-              {role === 'business' ? (
-                <Button variant="contained" color="secondary" href="/browse-properties" sx={{ mb: 2 }}>
-                  Browse Properties
-                </Button>
-              ) : null}
+              <Button variant="contained" color="secondary" href="/browse-properties" sx={{ mb: 2 }}>
+                Browse Properties
+              </Button>
               <Link href="/dashboard" underline="none">
                 <Button variant="outlined" color="primary">
                   Go to Dashboard
