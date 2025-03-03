@@ -11,6 +11,7 @@ const propertyRoutes = require('./routes/properties');
 const requestRoutes = require('./routes/requests');
 const userRoutes = require('./routes/users');
 const { upload } = require('./utils/fileUpload');
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -23,7 +24,7 @@ connectToMongo();
 
 // Middleware to extract user from token
 const auth = require('./middleware/auth');
-
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Register Route
 app.post('/api/register', async (req, res) => {
   const { name, email, password, role } = req.body;

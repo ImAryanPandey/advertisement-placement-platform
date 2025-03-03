@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Typography, MenuItem, Slider, Alert, Grid, Card, CardMedia } from '@mui/material';
+import { TextField, Button, Container, Box, Typography, MenuItem, Slider, Alert, Grid, Card, CardMedia, CardContent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Dropzone from 'react-dropzone';
 

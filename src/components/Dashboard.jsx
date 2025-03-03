@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import SendRequest from './SendRequest';
 
 const Dashboard = () => {
+  const backendURL = "http://localhost:5000/";
   const [role, setRole] = useState(null);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+console.log(properties);
   useEffect(() => {
     console.log('Verifying token');
     const token = localStorage.getItem('token');
@@ -93,7 +94,7 @@ const Dashboard = () => {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={property.images[0] || 'https://via.placeholder.com/300'}
+                  image={ (property?.images[0] && (backendURL + property?.images[0]?.replace(/\\/g, "/"))) || 'https://via.placeholder.com/300'}
                   alt={property.title}
                 />
                 <CardContent>
